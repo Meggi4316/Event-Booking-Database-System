@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Admin — Users</h1>
+
+<form method="get" class="form" style="max-width:420px;margin-bottom:12px;">
+  <label>Search users (name or email)
+    <input type="text" name="q" value="{{ q or '' }}">
+  </label>
+  <button class="btn" type="submit">Search</button>
+  <a class="btn" href="{{ url_for('admin_users') }}">Clear</a>
+</form>
+
+<table class="table">
+  <thead>
+    <tr><th>ID</th><th>Name</th><th>Email</th><th>Admin</th><th>Toggle</th></tr>
+  </thead>
+  <tbody>
+    {% for u in users %}
+    <tr>
+      <td>{{ u.id }}</td>
+      <td>{{ u.name }}</td>
+      <td>{{ u.email }}</td>
+      <td>{{ 'Yes' if u.admin else 'No' }}</td>
+      <td>
+        <form method="post" action="{{ url_for('admin_toggle_admin', user_id=u.id) }}">
+          <button class="btn" type="submit">{{ 'Revoke' if u.admin else 'Make Admin' }}</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

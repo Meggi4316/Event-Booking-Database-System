@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Admin — Dashboard</h1>
+
+<div class="card-grid">
+  <article class="card">
+    <h3>Overview</h3>
+    <p>Total Users: {{ stats.users }}</p>
+    <p>Total Events: {{ stats.events }}</p>
+    <p>Total Tickets: {{ stats.tickets }}</p>
+    <div class="actions">
+      <a class="btn" href="{{ url_for('admin_users') }}">Manage Users</a>
+      <a class="btn" href="{{ url_for('admin_event_new') }}">New Event</a>
+      <a class="btn" href="{{ url_for('admin_import') }}">Import Events (CSV)</a>
+    </div>
+  </article>
+
+  <article class="card" style="grid-column:1/-1;">
+    <h3>Events</h3>
+    <table class="table">
+      <thead>
+        <tr><th>Name</th><th>When</th><th>Capacity</th><th>Booked</th><th>Fill</th><th>Actions</th></tr>
+      </thead>
+      <tbody>
+      {% for e, booked, pct in occupancy %}
+        <tr>
+          <td>{{ e.name }}</td>
+          <td>{{ e.datetime.strftime('%d %b %Y, %I:%M %p') }}</td>
+          <td>{{ e.capacity }}</td>
+          <td>{{ booked }}</td>
+          <td>{{ pct }}%</td>
+          <td>
+            <a class="btn" href="{{ url_for('admin_event', event_id=e.id) }}">Attendees</a>
+            <a class="btn" href="{{ url_for('admin_event_edit', event_id=e.id) }}">Edit</a>
+            <form method="post" action="{{ url_for('admin_event_delete', event_id=e.id) }}" class="inline" onsubmit="return confirm('Delete this event?');">
+              <button class="btn" type="submit">Delete</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </article>
+</div>
+{% endblock %}

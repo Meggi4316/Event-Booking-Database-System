@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Admin — Import Events (CSV)</h1>
+<p>CSV headers required: <code>name,venue,description,capacity,datetime</code> (datetime format: <code>YYYY-MM-DDTHH:MM</code> or <code>YYYY-MM-DD HH:MM</code>).</p>
+<form method="post" enctype="multipart/form-data" class="form" style="max-width:420px;">
+  <label>CSV File
+    <input type="file" name="file" accept=".csv" required>
+  </label>
+  <button class="btn primary" type="submit">Import</button>
+</form>
+{% endblock %}

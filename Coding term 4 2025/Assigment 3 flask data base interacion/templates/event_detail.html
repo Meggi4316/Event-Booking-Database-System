@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ event.name }}</h1>
+<p class="muted">{{ event.venue }} • {{ event.datetime.strftime('%d %b %Y, %I:%M %p') }}</p>
+<p>{{ event.description }}</p>
+<p><strong>Capacity:</strong> {{ event.capacity }} • <strong>Spots left:</strong> {{ event.spots_left }}</p>
+
+{% if user %}
+  {% if event.spots_left > 0 %}
+  <form method="post" action="{{ url_for('book', event_id=event.id) }}" class="form" style="max-width:260px;">
+    <label for="qty">Quantity</label>
+    <select id="qty" name="qty">
+      {% for q in range(1,7) %}<option value="{{q}}">{{q}}</option>{% endfor %}
+    </select>
+    <button class="btn primary" type="submit">Book Now</button>
+  </form>
+  {% else %}
+  <p class="muted">This event is full.</p>
+  {% endif %}
+{% else %}
+  <a class="btn" href="{{ url_for('login') }}">Login to book</a>
+{% endif %}
+{% endblock %}
+
+

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Login</h1>
+<form method="post" class="form">
+  <label>Email
+    <input type="email" name="email" required>
+  </label>
+  <label>Password
+    <div class="pw-wrap">
+      <input id="login-pass" type="password" name="password" required>
+      <button class="btn" type="button" id="login-toggle" aria-controls="login-pass" aria-pressed="false">Show</button>
+    </div>
+  </label>
+  <div>
+    <a href="{{ url_for('forgot_password') }}">Forgot password?</a>
+  </div>
+  <button class="btn primary" type="submit">Login</button>
+</form>
+
+<script>
+  (function(){
+    const input = document.getElementById('login-pass');
+    const btn = document.getElementById('login-toggle');
+    btn.addEventListener('click', () => {
+      const shown = input.type === 'text';
+      input.type = shown ? 'password' : 'text';
+      btn.setAttribute('aria-pressed', String(!shown));
+      btn.textContent = shown ? 'Show' : 'Hide';
+    });
+  })();
+</script>
+{% endblock %}

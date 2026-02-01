@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Admin — {{ 'New Event' if mode=='new' else 'Edit Event' }}</h1>
+<form method="post" class="form" style="max-width:560px;">
+  <label>Name
+    <input type="text" name="name" required value="{{ event.name if event else '' }}">
+  </label>
+  <label>Venue
+    <input type="text" name="venue" required value="{{ event.venue if event else '' }}">
+  </label>
+  <label>Capacity
+    <input type="number" name="capacity" min="1" required value="{{ event.capacity if event else '' }}">
+  </label>
+  <label>Date &amp; Time
+    <input type="datetime-local" name="datetime" required value="{{ iso_dt if iso_dt else '' }}">
+  </label>
+  <label>Description
+    <textarea name="description" rows="5" required>{{ event.description if event else '' }}</textarea>
+  </label>
+  <button class="btn primary" type="submit">{{ 'Create' if mode=='new' else 'Update' }}</button>
+</form>
+{% endblock %}

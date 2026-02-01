@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Ticket #{{ t.id }}</h1>
+<p><strong>Event:</strong> {{ e.name }}</p>
+<p><strong>When:</strong> {{ e.datetime.strftime('%d %b %Y, %I:%M %p') }}</p>
+<p><strong>Venue:</strong> {{ e.venue }}</p>
+<p><strong>Booked For:</strong> {{ the_user.name }} ({{ the_user.email }})</p>
+<p><strong>Quantity:</strong> {{ t.qty }}</p>
+<p><strong>Check-in Code:</strong> <code>{{ t.checkinCode or 'N/A' }}</code></p>
+<p><strong>Status:</strong> {{ 'Checked In' if t.checked_in else 'Not Checked In' }}</p>
+{% endblock %}

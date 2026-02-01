@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Admin — {{ event.name }}</h1>
+<p>{{ event.venue }} • {{ event.datetime.strftime('%d %b %Y, %I:%M %p') }}</p>
+<p>Capacity: {{ event.capacity }} | Booked: {{ event.booked_total }} | Spots left: {{ event.spots_left }}</p>
+
+<form method="get" class="form" style="max-width:420px;margin-bottom:12px;">
+  <label>Search attendees (name, email, code, ticket id)
+    <input type="text" name="q" value="{{ query or '' }}">
+  </label>
+  <button class="btn" type="submit">Search</button>
+  <a class="btn" href="{{ url_for('admin_event', event_id=event.id) }}">Clear</a>
+</form>
+
+<p><a class="btn" href="{{ url_for('admin_export', event_id=event.id) }}">Export CSV</a>
+   <a class="btn" href="{{ url_for('admin_event_edit', event_id=event.id) }}">Edit Event</a></p>
+
+<table class="table">
+  <thead>
+    <tr><th>Tkt#</th><th>Name</th><th>Email</th><th>Qty</th><th>Checked In</th><th>Code</th><th>Purchased</th><th>Toggle</th></tr>
+  </thead>
+  <tbody>
+  {% for t, u in attendees %}
+    <tr>
+      <td>{{ t.id }}</td>
+      <td>{{ u.name }}</td>
+      <td>{{ u.email }}</td>
+      <td>{{ t.qty }}</td>
+      <td>{{ 'Yes' if t.checked_in else 'No' }}</td>
+      <td><code>{{ t.checkinCode }}</code></td>
+      <td>{{ t.purchaseDate.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+      <td>
+        <form method="post" action="{{ url_for('admin_toggle_checkin', ticket_id=t.id) }}">
+          <button class="btn" type="submit">{{ 'Uncheck' if t.checked_in else 'Check in' }}</button>
+        </form>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

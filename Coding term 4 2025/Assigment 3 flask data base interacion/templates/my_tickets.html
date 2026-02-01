@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>My Tickets</h1>
+{% if rows %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>Event</th><th>When</th><th>Qty</th><th>Checked In</th><th>View</th><th>Cancel</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for t, e in rows %}
+    <tr>
+      <td>{{ e.name }}</td>
+      <td>{{ e.datetime.strftime('%d %b %Y, %I:%M %p') }}</td>
+      <td>{{ t.qty }}</td>
+      <td>{{ 'Yes' if t.checked_in else 'No' }}</td>
+      <td><a class="btn" href="{{ url_for('ticket_view', ticket_id=t.id) }}">Open</a></td>
+      <td>
+        <form method="post" action="{{ url_for('cancel_ticket', ticket_id=t.id) }}" onsubmit="return confirm('Cancel this booking?');">
+          <button class="btn" type="submit">Cancel</button>
+        </form>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="muted">No tickets yet.</p>
+{% endif %}
+{% endblock %}

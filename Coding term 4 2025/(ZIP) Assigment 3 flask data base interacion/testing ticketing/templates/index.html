@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Upcoming Events</h1>
+
+<form method="get" class="form" style="max-width:520px;margin-bottom:14px;">
+  <label>Search events
+    <input type="text" name="q" placeholder="Search by name, venue, or description" value="{{ q or '' }}">
+  </label>
+  <button class="btn" type="submit">Search</button>
+</form>
+
+<div class="card-grid">
+  {% for e in events %}
+  <article class="card">
+    <h3>{{ e.name }}</h3>
+    <p class="muted">{{ e.venue }} • {{ e.datetime.strftime('%d %b %Y, %I:%M %p') }}</p>
+    <p>{{ e.description }}</p>
+    <div class="badges">
+      <span class="badge">Capacity: {{ e.capacity }}</span>
+      <span class="badge {{ 'full' if e.spots_left == 0 else 'ok' }}">{{ e.spots_left }} spots left</span>
+    </div>
+    <div class="actions">
+      <a class="btn" href="{{ url_for('event_detail', event_id=e.id) }}">View</a>
+      {% if user and e.spots_left > 0 %}
+      <form method="post" action="{{ url_for('book', event_id=e.id) }}" class="inline">
+        <label for="qty-{{e.id}}" class="sr-only">Quantity</label>
+        <select name="qty" id="qty-{{e.id}}">
+          {% for qn in range(1,7) %}<option value="{{qn}}">{{qn}}</option>{% endfor %}
+        </select>
+        <button class="btn primary" type="submit">Book</button>
+      </form>
+      {% elif not user %}
+        <a class="btn" href="{{ url_for('login') }}">Login to book</a>
+      {% endif %}
+    </div>
+  </article>
+  {% else %}
+    <p class="muted">No events found.</p>
+  {% endfor %}
+</div>
+{% endblock %}

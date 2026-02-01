@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Create Account</h1>
+<form method="post" class="form">
+  <label>Name
+    <input type="text" name="name" required>
+  </label>
+  <label>Email
+    <input type="email" name="email" required>
+  </label>
+  <label>Password
+    <div class="pw-wrap">
+      <input id="reg-pass" type="password" name="password" required>
+      <button class="btn" type="button" id="reg-toggle" aria-controls="reg-pass" aria-pressed="false">Show</button>
+    </div>
+  </label>
+  <button class="btn primary" type="submit">Register</button>
+</form>
+
+<script>
+  (function(){
+    const input = document.getElementById('reg-pass');
+    const btn = document.getElementById('reg-toggle');
+    btn.addEventListener('click', () => {
+      const shown = input.type === 'text';
+      input.type = shown ? 'password' : 'text';
+      btn.setAttribute('aria-pressed', String(!shown));
+      btn.textContent = shown ? 'Show' : 'Hide';
+    });
+  })();
+</script>
+{% endblock %}
